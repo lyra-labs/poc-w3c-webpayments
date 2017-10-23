@@ -1,0 +1,234 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:400,600,700');
+@import "~dialog-polyfill/dialog-polyfill.css";
+
+$primary-color: #629fff;
+$font-grey: #7a7a7a;
+$border-grey: #ddd;
+
+@keyframes __prDialog_anim_show {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes __prDialog_anim_hide {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes __prDialog_anim_spinner {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+#__prDialog {
+  display: flex;
+  flex-direction: column;
+  font-family: 'Open Sans', sans-serif;
+  top: 10px;
+  width: 500px;
+  min-height: 500px;
+  padding: 16px;
+  border: 1px solid #bbb;
+  border-radius: 2px;
+  box-shadow: 0 2px 1px -1px #ccc;
+
+  &[open] {
+    animation: __prDialog_anim_show 200ms;
+  }
+
+  &.__prDialog_hide {
+    animation: __prDialog_anim_hide 200ms;
+  }
+
+  &.__prDialog_spinner:before {
+    content: '';
+    box-sizing: border-box;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20px;
+    height: 20px;
+    margin-top: -10px;
+    margin-left: -10px;
+    border-radius: 50%;
+    border: 2px solid transparent;
+    border-top-color: #07d;
+    border-bottom-color: #07d;
+    animation: __prDialog_anim_spinner .8s ease infinite;
+  }
+
+  &.__prDialog_spinner:after {
+    content: 'Processing';
+    padding-top: 53%;
+    text-align: center;
+    font-size: 0.75em;
+  }
+
+  &::backdrop {
+    background: none;
+  }
+
+  button {
+    min-width: 70px;
+    height: 30px;
+    padding: 0 10px;
+    background-color: #fbfbfb;
+    border-radius: 2px;
+    border: 1px solid #bbb;
+    font-family: inherit;
+    text-shadow: 0 1px white;
+    box-shadow: 0 1px #eee;
+
+    &:hover {
+      filter: brightness(104%);
+    }
+
+    &:active {
+      filter: brightness(96%);
+    }
+  }
+
+  header {
+    font-size: 15px;
+  }
+
+  #__prDialog_content {
+    flex: 1;
+    padding: 10px 0;
+    font-size: 0.75em;
+
+    button {
+      font-size: inherit;
+      margin-right: 14px;
+    }
+
+    .__prDialogInputError {
+      border: 1px solid #ff6e6e;
+    }
+
+    input {
+      width: 80%;
+      padding: 5px 2px;
+      border: 1px solid $border-grey;
+    }
+
+    select {
+      margin-right: 10px;
+      padding: 5px 2px 5px 12px;
+      border: 1px solid $border-grey;
+    }
+
+    #__prDialogSecurityCodeRow {
+      img {
+        height: 27px;
+      }
+
+      input {
+        width: 100px;
+        vertical-align: top;
+        margin-left: 14px;
+      }
+    }
+  }
+
+  footer {
+    display: flex;
+
+    div {
+      flex: auto;
+    }
+
+    button {
+      flex: initial;
+      margin-left: 14px;
+      font-size: 0.75em;
+
+      &#__prDialog_payButton {
+        background-color: $primary-color;
+        border: 1px solid darken($primary-color, 20%);
+        color: white;
+        text-shadow: none;
+      }
+    }
+  }
+}
+
+.__prDialogRow {
+  display: flex;
+  border-bottom: 1px solid lighten($border-grey, 8%);
+  padding: 8px 0;
+
+  .__prDialogRow_title {
+    flex: 1 0 0;
+    font-weight: 600;
+  }
+
+  .__prDialogRow_content {
+    flex: 3 0 0;
+
+    .__prDialogOrderRow_paymentItem {
+      display: flex;
+
+      &.__prDialogOrderRow_paymentItem_bold {
+        font-weight: bold;
+      }
+
+      .__prDialogOrderRow_paymentItem_label {
+        flex: auto;
+      }
+
+      .__prDialogOrderRow_paymentItem_currency {
+        flex: initial;
+        padding-right: 30px;
+      }
+
+      .__prDialogOrderRow_paymentItem_amount {
+        flex: initial;
+      }
+    }
+
+    #__prDialogPaymentRow_networksLabel {
+      color: $font-grey;
+    }
+
+    #__prDialogPaymentRow_networksList {
+      padding: 4px 0;
+
+      img {
+        margin-right: 6px;
+        border-radius: 4px;
+        border: 1px solid $border-grey;
+        max-width: 40px;
+      }
+    }
+
+    .__prDialogPaymentRow_formRow {
+      display: flex;
+      height: 40px;
+      line-height: 40px;
+      vertical-align: middle;
+
+      .__prDialogPaymentRow_formRow_label {
+        flex: 1 0 0;
+      }
+
+      .__prDialogPaymentRow_formRow_input {
+        flex: 2 0 0;
+      }
+    }
+
+    #__prDialogPaymentRow_hint {
+      color: $font-grey;
+    }
+
+    #__prDialogCardsRow select {
+      width: 100%;
+    }
+  }
+}

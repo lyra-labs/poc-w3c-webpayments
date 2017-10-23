@@ -1,0 +1,51 @@
+@startuml
+hide footbox
+title Encrypted Card Interaction with 3DS
+
+skinparam sequence {
+  ArrowColor black
+}
+
+actor "User" as A
+participant "Browser" as B
+participant "Payment Handler" as C
+participant "Merchant" as D
+participant "Key Provider" as E
+participant "ACS" as G
+
+A -> B : request payment
+hnote over A : <color #red>+ URL Key Provider</color>
+B -> D : show payment request
+D --> B
+B --> A
+A -> B : choose payment method
+B -> C : hand-over control
+C -[#red]> E : <color #red>obtain encryption key</color>
+E --[#red]> C
+C -[#red]> C : <color #red>encrypt card data</color>
+hnote left : <color #red>EncryptedCardData</color>
+C -[#red]> D : <color #red>encrypted payload</color>
+hnote right : <color #red>EncryptedCardResponse</color>
+
+group Out of W3C specification
+D -[#red]> E : <color #red>request payment</color>
+
+group only in case of enrolled cardholder
+E --[#red]> D : <color #red>enrolled</color>
+hnote left : <color #red>ACS URL</color>
+D -[#red]> C : <color #red>authenticate cardholder</color>
+C -[#red]> A : <color #red>redirect to authentication</color>
+A -[#red]> G : <color #red>authenticate</color>
+G --[#red]> A: <color #red>authenticated</color>
+A --[#red]> C: <color #red>authenticated</color>
+C --[#red]> D: <color #red>authenticated</color>
+D -[#red]> E : <color #red>finalize payment</color>
+end group
+
+E --[#red]> D : <color #red>status</color>
+end group
+
+D --> C : status
+C --> B : status
+B --> A : status
+@enduml

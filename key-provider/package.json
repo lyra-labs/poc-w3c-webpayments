@@ -1,0 +1,42 @@
+{
+  "name": "key-provider",
+  "version": "1.0.0",
+  "license": "MIT",
+  "homepage": "https://github.com/lyra-labs/poc-w3c-webpayments",
+  "author": {
+    "name": "Lyra Network",
+    "email": "contact@lyra-network.com",
+    "url": "http://www.lyra-network.com"
+  },
+  "contributors": [
+    {
+      "name": "Alex Fournier",
+      "email": "alexandre.fournier@lyra-network.com",
+      "url": "https://github.com/alex-fournier"
+    }
+  ],
+  "main": "src/index.js",
+  "scripts": {
+    "start": "nodemon src/index.js --exec babel-node --presets=env",
+    "lint": "eslint src/"
+  },
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "config": "^1.26.2",
+    "express": "^4.16.1",
+    "minimist": "^1.2.0",
+    "node-rsa": "^0.4.2",
+    "payment": "^2.3.0",
+    "soap": "^0.23.0",
+    "uuid": "^3.1.0"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-preset-env": "^1.6.0",
+    "eslint": "^4.9.0",
+    "eslint-config-airbnb-base": "^12.1.0",
+    "eslint-plugin-import": "^2.7.0",
+    "nodemon": "^1.12.1"
+  }
+}
