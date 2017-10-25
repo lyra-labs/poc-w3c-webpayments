@@ -10,7 +10,8 @@ import * as colors from 'material-ui/styles/colors';
 import MuiNotification from 'react-materialui-notifications';
 import { clearCart } from '../redux/actions';
 import * as keyProvider from '../rest/keyProvider';
-import paymentMethod from '../resources/config/paymentMethod.json';
+import paymentMethod from '../resources/data/paymentMethod';
+import config from '../../config';
 
 class Cart extends React.Component {
   static propTypes = {
@@ -111,7 +112,7 @@ class Cart extends React.Component {
         paymentResponse = payRes;
 
         const body = {
-          amount: this.props.cart.total * 100,
+          amount: this.props.cart.total * 100, // amount in cents
           currency: 840, // ISO 4217 code for USD
           encryptedCardData: paymentResponse.details.encryptedCardData,
         };
@@ -123,6 +124,16 @@ class Cart extends React.Component {
           throw new Error(res.error);
         }
 
+        if (res.status === '3DS') {
+          return paymentRequest.show3DS({
+            termUrl: `http://${config.hostname}:${config.port}/acsReturn`,
+            ...res.details,
+          });
+        }
+
+        return Promise.resolve();
+      })
+      .then(() => {
         paymentResponse.complete('success');
         this.displayNotificationSuccess();
         this.onClearCart();

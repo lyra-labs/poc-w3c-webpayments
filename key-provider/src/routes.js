@@ -1,20 +1,27 @@
 import RSA from 'node-rsa';
+import uuid from 'uuid';
 import minimist from 'minimist';
 import * as backends from './backends';
 
 const FORMAT_PUBLIC = 'pkcs1-public';
+const FORMAT_PRIVATE = 'pkcs1-private';
 const DEFAULT_BACKEND = 'payzen';
 
 const argv = minimist(process.argv.slice(2));
 const backend = argv.backend ? argv.backend : DEFAULT_BACKEND;
-const keys = {};
+if (!backends[backend]) {
+  throw new Error(`backend ${backend} does not exist`);
+}
 
-// GET /:requestId/obtainEncryptionKey
+// in-memory store of private keys
+const privateKeys = {};
+
+// GET /obtainEncryptionKey
 export function obtainEncryptionKey(req, res) {
-  const { requestId } = req.params;
   const key = new RSA({ b: 1024 });
+  const requestId = uuid();
 
-  keys[requestId] = key;
+  privateKeys[requestId] = key.exportKey(FORMAT_PRIVATE);
 
   res.send({
     requestId,
@@ -22,11 +29,16 @@ export function obtainEncryptionKey(req, res) {
   });
 }
 
-// POST /:requestId/payment
+// POST /payment
 export function payment(req, res) {
-  const { requestId } = req.params;
-  const key = keys[requestId];
-  const cardData = key.decrypt(req.body.encryptedCardData, 'json');
+  const { requestId } = req.query;
 
-  backends[backend].payment(requestId, req.body, cardData, res);
+  if (requestId) {
+    const key = new RSA(privateKeys[requestId]);
+    const cardData = key.decrypt(req.body.encryptedCardData, 'json');
+    backends[backend].payment(req, res, requestId, cardData);
+    delete privateKeys[requestId];
+  } else {
+    backends[backend].payment(req, res);
+  }
 }

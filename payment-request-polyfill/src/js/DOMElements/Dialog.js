@@ -82,6 +82,65 @@ export default class Dialog {
     return dialog;
   }
 
+  static askSecurityCode() {
+    const cardNumber = document.querySelector(`#${Dialog.ID} input[name="cardNumber"]`).value;
+
+    // remove current content rows (order summary, payment data...)
+    document.querySelectorAll(`.${DialogRow.CLASS}`).forEach(el => el.remove());
+
+    const content = document.getElementById(`${Dialog.ID}_content`);
+    const securityCodeRow = DialogSecurityCodeRow.build(cardNumber);
+    content.appendChild(securityCodeRow);
+
+    document.querySelector(`#${Dialog.ID} input`).focus();
+  }
+
+  static ask3DS(details, resolve, reject) {
+    const root = Dialog.clear();
+
+    const iframe = document.createElement('iframe');
+    root.appendChild(iframe);
+
+    const doc = iframe.contentDocument || iframe.contentWindow.document;
+
+    const content = `
+    <html>
+    <body>
+      <form name="3DSForm" method="post" action="${details.redirectUrl}">
+        <input type="hidden" name="PaReq" value="${details.pareq}" />
+        <input type="hidden" name="TermUrl" value="${details.termUrl}" />
+        <input type="hidden" name="MD" value="${details.md}" />
+      </form>
+    </body>
+    </html>
+    `;
+
+    doc.open();
+    doc.write(content);
+    doc.close();
+
+    doc.forms['3DSForm'].submit();
+
+    document.addEventListener('paymentAccepted', resolve);
+    document.addEventListener('paymentRefused', reject);
+  }
+
+  static processing() {
+    const root = Dialog.clear();
+    root.classList.add(`${Dialog.ID}_spinner`);
+  }
+
+  static clear() {
+    const root = document.getElementById(Dialog.ID);
+    while (root.firstChild) {
+      root.removeChild(root.firstChild);
+    }
+
+    root.className = '';
+
+    return root;
+  }
+
   static checkInputs() {
     const errorClass = '__prDialogInputError';
     let result = true;
@@ -100,29 +159,5 @@ export default class Dialog {
 
   static getInputValue(inputName) {
     return document.querySelector(`#${Dialog.ID} [name="${inputName}"]`).value;
-  }
-
-  static askSecurityCode() {
-    const cardNumber = document.querySelector(`#${Dialog.ID} input[name="cardNumber"]`).value;
-
-    // remove current content rows (order summary, payment data...)
-    document.querySelectorAll(`.${DialogRow.CLASS}`).forEach(el => el.remove());
-
-    const content = document.getElementById(`${Dialog.ID}_content`);
-    const securityCodeRow = DialogSecurityCodeRow.build(cardNumber);
-    content.appendChild(securityCodeRow);
-
-    document.querySelector(`#${Dialog.ID} input`).focus();
-  }
-
-  static processing() {
-    // clear dialog
-    const root = document.getElementById(Dialog.ID);
-    while (root.firstChild) {
-      root.removeChild(root.firstChild);
-    }
-
-    // display loading spinner
-    root.classList.add(`${Dialog.ID}_spinner`);
   }
 }

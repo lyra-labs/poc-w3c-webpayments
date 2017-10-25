@@ -1,4 +1,3 @@
-import uuid from 'uuid';
 import RSA from 'node-rsa';
 import dialogPolyfill from 'dialog-polyfill';
 import Dialog from './DOMElements/Dialog';
@@ -24,7 +23,6 @@ export default class PaymentRequest {
     this.encryptedCardRequest = new EncryptedCardRequest();
     this.encryptedCardData = new EncryptedCardData();
     this.details = details;
-    this.requestId = uuid();
     this.currentStep = 1;
 
     this.encryptedCardRequest.supportedNetworks = methodData.data.supportedNetworks;
@@ -55,7 +53,7 @@ export default class PaymentRequest {
           Dialog.processing();
 
           this.keyProvider
-            .obtainEncryptionKey(this.requestId)
+            .obtainEncryptionKey()
             .then((res) => {
               const publicKey = Buffer.from(res.publicKey, 'base64').toString('utf8');
               const key = new RSA(publicKey);
@@ -67,7 +65,7 @@ export default class PaymentRequest {
               encryptedCardResponse.encryptedCardData = encryptedCardData;
 
               const paymentResponse = new PaymentResponse();
-              paymentResponse.requestId = this.requestId;
+              paymentResponse.requestId = res.requestId;
               paymentResponse.methodName = PaymentRequest.method;
               paymentResponse.details = encryptedCardResponse;
 
@@ -90,11 +88,9 @@ export default class PaymentRequest {
     });
   }
 
-  abort() {
-    throw new Error('not implemented');
-  }
-
-  canMakePayment() {
-    throw new Error('not implemented');
+  show3DS(details) {
+    return new Promise((resolve, reject) => {
+      Dialog.ask3DS(details, resolve, reject);
+    });
   }
 }

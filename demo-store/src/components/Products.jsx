@@ -13,7 +13,7 @@ import IconShoppingCart from 'material-ui/svg-icons/action/shopping-cart';
 import { grey400 } from 'material-ui/styles/colors';
 import { connect } from 'react-redux';
 import { addToCart } from '../redux/actions';
-import songs from '../resources/config/songs';
+import songs from '../resources/data/songs';
 
 const propTypes = {
   cart: PropTypes.shape({

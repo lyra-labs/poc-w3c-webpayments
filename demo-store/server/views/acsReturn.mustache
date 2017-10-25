@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+</head>
+<body>
+<script>
+  const headers = new window.Headers();
+  headers.append('Content-Type', 'application/json');
+
+  const request = new window.Request('{{{paymentUrl}}}', {
+    method: 'POST',
+    body: '{{{body}}}',
+    headers: headers,
+  });
+
+  window
+    .fetch(request)
+    .then(res => res.json())
+    .then((res) => {
+      const event = new Event(res.status === 'OK' ? 'paymentAccepted' : 'paymentRefused');
+      window.parent.document.dispatchEvent(event);
+    })
+    .catch((err) => {
+      throw err;
+    });
+</script>
+</body>
+</html>

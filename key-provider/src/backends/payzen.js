@@ -15,6 +15,9 @@ const cardArray = pymnt.getCardArray().map(card => ({
 
 pymnt.setCardArray(cardArray);
 
+// in-memory store of pending payments
+const pendingPayments = {};
+
 function buildCommonRequest(timestamp) {
   return {
     submissionDate: timestamp,
@@ -73,30 +76,47 @@ function setSoapHeaders(client, timestamp) {
   });
 }
 
-export function payment(requestId, body, cardData, res) {
+export function payment(req, res, requestId, cardData) {
   const timestamp = `${(new Date()).toISOString().split('.')[0]}Z`;
+
+  let soapClient;
+  let workload;
+
+  if (requestId) {
+    // first call to /payment
+    workload = {
+      commonRequest: buildCommonRequest(timestamp),
+      paymentRequest: buildPaymentRequest(req.body),
+      orderRequest: buildOrderRequest(requestId),
+      cardRequest: buildCardRequest(cardData),
+      threeDSRequest: buildThreeDSRequest(),
+    };
+  } else {
+    // second call to /payment (in case of 3DS)
+    const threeDSRequestId = req.body.MD.split('+')[1];
+    workload = pendingPayments[threeDSRequestId];
+    workload.commonRequest.submissionDate = timestamp;
+    workload.threeDSRequest.mode = 'ENABLED_FINALIZE';
+    workload.threeDSRequest.requestId = threeDSRequestId;
+    workload.threeDSRequest.pares = req.body.PaRes;
+    delete pendingPayments[threeDSRequestId];
+  }
 
   const options = {
     trace: 1,
     encoding: 'UTF-8',
   };
 
-  const workload = {
-    commonRequest: buildCommonRequest(timestamp),
-    paymentRequest: buildPaymentRequest(body),
-    orderRequest: buildOrderRequest(requestId),
-    cardRequest: buildCardRequest(cardData),
-    threeDSRequest: buildThreeDSRequest(),
-  };
-
   soap
     .createClientAsync(payzenConfig.wsdl, options)
     .then((client) => {
+      soapClient = client;
       setSoapHeaders(client, timestamp);
       return client.createPaymentAsync(workload);
     })
     .then((result) => {
-      const { commonResponse } = result.createPaymentResult;
+      const { commonResponse, threeDSResponse } = result.createPaymentResult;
+      const authRequestData = threeDSResponse.authenticationRequestData;
 
       if (commonResponse.responseCode !== 0) {
         throw new Error(commonResponse.responseCodeDetail);
@@ -106,7 +126,22 @@ export function payment(requestId, body, cardData, res) {
         return res.json({ status: 'OK' });
       }
 
-      // TODO: handle 3DS here
+      if (authRequestData && authRequestData.threeDSEnrolled === 'Y') {
+        const setCookie = soapClient.lastResponseHeaders['set-cookie'];
+        const sessionID = setCookie[0].match(/JSESSIONID=([A-Za-z0-9.]+)/)[1];
+
+        // save workload for next call to /payment
+        pendingPayments[authRequestData.threeDSRequestId] = workload;
+
+        return res.json({
+          status: '3DS',
+          details: {
+            redirectUrl: `${authRequestData.threeDSAcsUrl};jsessionid=${sessionID}`,
+            pareq: authRequestData.threeDSEncodedPareq,
+            md: `${sessionID}+${authRequestData.threeDSRequestId}`,
+          },
+        });
+      }
 
       return res.json({ status: 'KO' });
     })

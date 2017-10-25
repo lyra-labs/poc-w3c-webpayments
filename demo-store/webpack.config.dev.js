@@ -1,11 +1,11 @@
 const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 
 module.exports = {
   entry: [
     'babel-polyfill',
+    'webpack-hot-middleware/client?reload=true',
     path.resolve(__dirname, 'src/index.jsx'),
   ],
 
@@ -57,25 +57,24 @@ module.exports = {
   },
 
   plugins: [
+    new webpack.DefinePlugin({
+      'process.env': {
+        NODE_ENV: JSON.stringify('development'),
+      },
+    }),
     new HtmlWebpackPlugin({
       template: path.resolve('src/index.ejs'),
       favicon: path.resolve('src/resources/imgs/favicon.ico'),
       inject: true,
     }),
+    new webpack.HotModuleReplacementPlugin(),
     new webpack.NamedModulesPlugin(),
     new webpack.NoEmitOnErrorsPlugin(),
-    new CaseSensitivePathsPlugin(),
   ],
 
   output: {
     pathinfo: true,
     path: path.resolve(__dirname, 'dist'),
     filename: '[name].bundle.js',
-  },
-
-  devServer: {
-    contentBase: './dist',
-    host: 'localhost',
-    port: 3000,
   },
 };
