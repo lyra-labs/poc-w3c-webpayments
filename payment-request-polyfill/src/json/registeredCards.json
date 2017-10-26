@@ -35,7 +35,7 @@
     "billingAddress": "Pierre Martin, 8 Rue Auguste Maquet, 75016 Paris, FRANCE"
   },
   "Visa **** 0006 / Payment accepted / 3DS enabled": {
-    "cardNumber": "4970 1000 0000 0006",
+    "cardNumber": "4970 1000 0000 0022",
     "nameOnCard": "Pierre Martin",
     "expiryMonth": "06",
     "expiryYear": "2018",
