@@ -7,6 +7,8 @@ import DialogSecurityCodeRow from './DialogSecurityCodeRow';
 
 export default class Dialog {
   static ID = '__prDialog';
+  static PAYMENT_ACCEPTED = 'paymentAccepted';
+  static PAYMENT_REFUSED = 'paymentRefused';
 
   static close(callback) {
     document.getElementById(Dialog.ID).classList.add(`${Dialog.ID}_hide`);
@@ -97,12 +99,13 @@ export default class Dialog {
 
   static ask3DS(details, resolve, reject) {
     const root = Dialog.clear();
+    root.addEventListener(Dialog.PAYMENT_ACCEPTED, resolve);
+    root.addEventListener(Dialog.PAYMENT_REFUSED, reject);
 
     const iframe = document.createElement('iframe');
     root.appendChild(iframe);
 
     const doc = iframe.contentDocument || iframe.contentWindow.document;
-
     const content = `
     <html>
     <body>
@@ -120,9 +123,11 @@ export default class Dialog {
     doc.close();
 
     doc.forms['3DSForm'].submit();
+  }
 
-    document.addEventListener('paymentAccepted', resolve);
-    document.addEventListener('paymentRefused', reject);
+  static notify3DSDone(accepted) {
+    const event = new window.Event(accepted ? Dialog.PAYMENT_ACCEPTED : Dialog.PAYMENT_REFUSED);
+    window.parent.document.getElementById(Dialog.ID).dispatchEvent(event);
   }
 
   static processing() {

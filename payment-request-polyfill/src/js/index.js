@@ -93,4 +93,8 @@ export default class PaymentRequest {
       Dialog.ask3DS(details, resolve, reject);
     });
   }
+
+  static notify3DSDone(accepted) {
+    Dialog.notify3DSDone(accepted);
+  }
 }

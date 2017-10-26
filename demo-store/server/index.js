@@ -17,6 +17,11 @@ app.set('views', path.join(__dirname, 'views'));
 
 app.use(bodyParser.urlencoded({ extended: false }));
 
+app.get('/paymentRequestPolyfill.js', (req, res) => {
+  const libPath = path.resolve(__dirname, '../node_modules/payment-request-polyfill/dist/payment-request-polyfill.js');
+  res.sendFile(libPath);
+});
+
 app.post('/acsReturn', (req, res) => {
   res.render('acsReturn', {
     paymentUrl: `${config.keyProviderURL}/payment`,

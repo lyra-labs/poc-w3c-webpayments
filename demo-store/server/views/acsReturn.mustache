@@ -4,7 +4,10 @@
   <meta charset="UTF-8">
 </head>
 <body>
+<script src="/paymentRequestPolyfill.js"></script>
 <script>
+  window.PaymentRequest = PaymentRequestPolyfill.default;
+
   const headers = new window.Headers();
   headers.append('Content-Type', 'application/json');
 
@@ -18,8 +21,7 @@
     .fetch(request)
     .then(res => res.json())
     .then((res) => {
-      const event = new Event(res.status === 'OK' ? 'paymentAccepted' : 'paymentRefused');
-      window.parent.document.dispatchEvent(event);
+      window.PaymentRequest.notify3DSDone(res.status === 'OK');
     })
     .catch((err) => {
       throw err;
