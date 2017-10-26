@@ -21,6 +21,7 @@ export function obtainEncryptionKey(req, res) {
   const key = new RSA({ b: 1024 });
   const requestId = uuid();
 
+  // save private key for next call to /payment
   privateKeys[requestId] = key.exportKey(FORMAT_PRIVATE);
 
   res.send({
@@ -34,11 +35,13 @@ export function payment(req, res) {
   const { requestId } = req.query;
 
   if (requestId) {
+    // first call to /payment
     const key = new RSA(privateKeys[requestId]);
     const cardData = key.decrypt(req.body.encryptedCardData, 'json');
     backends[backend].payment(req, res, requestId, cardData);
     delete privateKeys[requestId];
   } else {
+    // second call to /payment (in case of 3DS)
     backends[backend].payment(req, res);
   }
 }

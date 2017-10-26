@@ -133,6 +133,7 @@ export function payment(req, res, requestId, cardData) {
         // save workload for next call to /payment
         pendingPayments[authRequestData.threeDSRequestId] = workload;
 
+        // need 3DS authentication
         return res.json({
           status: '3DS',
           details: {
@@ -143,10 +144,19 @@ export function payment(req, res, requestId, cardData) {
         });
       }
 
-      return res.json({ status: 'KO' });
+      return res.json({
+        status: 'KO',
+        error: 'Payment declined',
+      });
     })
     .catch((err) => {
-      res.json({ status: 'KO' });
-      throw new Error(err.body ? err.body : err.message);
+      res.json({
+        status: 'KO',
+        error: err.message ? err.message : undefined,
+      });
+
+      if (err.body) {
+        throw new Error(err.body);
+      }
     });
 }

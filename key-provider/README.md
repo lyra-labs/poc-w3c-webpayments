@@ -1,5 +1,9 @@
 # Key Provider
 
+## Installation
+
+`yarn install`
+
 ## Usage
 
 ### Production
@@ -27,7 +31,7 @@ Returns the RSA public key to the Payment Request API for card data encryption.
 ```javascript
 {
   requestId: '123-456-789',
-  publicKey: 'base64string.....',
+  publicKey: 'base64string...',
 }
 ```
 
@@ -41,14 +45,36 @@ Decrypts the card data and makes the payment to the registered payment backend s
 {
   amount: 1200, // $12.00
   currency: 840, // ISO 4217 code for USD
-  encryptedCardData: 'base64string.....',
+  encryptedCardData: 'base64string...',
 }
 ```
 
-##### Response
+##### Responses
 
 ```javascript
 {
   status: 'OK',
+}
+```
+
+or
+
+```javascript
+{
+  status: 'KO',
+  error: 'message...',
+}
+```
+
+or
+
+```javascript
+{
+  status: '3DS',
+  details: {
+    redirectUrl: 'http://...',
+    pareq: '...',
+    md: '...',
+  }
 }
 ```

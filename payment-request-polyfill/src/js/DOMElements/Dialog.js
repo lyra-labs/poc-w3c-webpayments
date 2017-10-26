@@ -23,7 +23,6 @@ export default class Dialog {
   static buildHeader() {
     const header = document.createElement('header');
     header.appendChild(document.createTextNode('Your Payment'));
-
     return header;
   }
 
@@ -87,7 +86,7 @@ export default class Dialog {
   static askSecurityCode() {
     const cardNumber = document.querySelector(`#${Dialog.ID} input[name="cardNumber"]`).value;
 
-    // remove current content rows (order summary, payment data...)
+    // remove current content rows (order summary, payment data etc.)
     document.querySelectorAll(`.${DialogRow.CLASS}`).forEach(el => el.remove());
 
     const content = document.getElementById(`${Dialog.ID}_content`);

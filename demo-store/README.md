@@ -1,5 +1,19 @@
 # Demo Store
 
+## Installation
+
+Package `payment-request-polyfill` must be linked locally.
+
+```
+cd /path/to/payment-request-polyfill
+yarn install
+yarn build
+yarn link
+cd /path/to/demo-store
+yarn install
+yarn link payment-request-polyfill
+```
+
 ## Usage
 
 ### Production

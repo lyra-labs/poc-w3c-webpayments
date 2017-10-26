@@ -11,17 +11,20 @@ const config = require('../config');
 const isDeveloping = process.env.NODE_ENV !== 'production';
 const app = express();
 
+// configure template engine (mustache)
 app.engine('mustache', mustache());
 app.set('view engine', 'mustache');
 app.set('views', path.join(__dirname, 'views'));
 
+// enable urlencoded parsing of request body
 app.use(bodyParser.urlencoded({ extended: false }));
 
+// serve our Payment Request API polyfill
 app.get('/paymentRequestPolyfill.js', (req, res) => {
-  const libPath = path.resolve(__dirname, '../node_modules/payment-request-polyfill/dist/payment-request-polyfill.js');
-  res.sendFile(libPath);
+  res.sendFile(path.resolve(__dirname, '../node_modules/payment-request-polyfill/dist/payment-request-polyfill.js'));
 });
 
+// URL called by the ACS when 3DS authentication is completed
 app.post('/acsReturn', (req, res) => {
   res.render('acsReturn', {
     paymentUrl: `${config.keyProviderURL}/payment`,
@@ -62,6 +65,7 @@ if (isDeveloping) {
   });
 }
 
+// start server
 app.listen(config.port, config.hostname, (err) => {
   if (err) {
     throw err;
