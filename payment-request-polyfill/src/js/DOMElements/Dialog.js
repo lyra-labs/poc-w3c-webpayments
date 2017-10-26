@@ -103,6 +103,17 @@ export default class Dialog {
     root.addEventListener(Dialog.PAYMENT_REFUSED, reject);
 
     const iframe = document.createElement('iframe');
+    iframe.id = `${Dialog.ID}_iframe`;
+
+    // hack to keep loading wheel displayed until ACS form is loaded
+    let loadCounter = 0;
+    iframe.addEventListener('load', () => {
+      if (loadCounter === 2) {
+        root.className = '';
+      }
+      loadCounter += 1;
+    });
+
     root.appendChild(iframe);
 
     const doc = iframe.contentDocument || iframe.contentWindow.document;
@@ -132,7 +143,7 @@ export default class Dialog {
 
   static processing() {
     const root = Dialog.clear();
-    root.classList.add(`${Dialog.ID}_spinner`);
+    root.className = `${Dialog.ID}_spinner`;
   }
 
   static clear() {
@@ -140,8 +151,6 @@ export default class Dialog {
     while (root.firstChild) {
       root.removeChild(root.firstChild);
     }
-
-    root.className = '';
 
     return root;
   }
