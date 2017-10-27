@@ -47,19 +47,5 @@
     "expiryMonth": "06",
     "expiryYear": "2018",
     "billingAddress": "Pierre Martin, 8 Rue Auguste Maquet, 75016 Paris, FRANCE"
-  },
-  "AMEX **** 0008 / Payment accepted": {
-    "cardNumber": "3782 820000 00008",
-    "nameOnCard": "Davide Dellucci",
-    "expiryMonth": "06",
-    "expiryYear": "2018",
-    "billingAddress": "Davide Dellucci, Via Belviglieri 101, 00144 Roma, ITALY"
-  },
-  "AMEX **** 0024 / Payment declined": {
-    "cardNumber": "3782 820000 00024",
-    "nameOnCard": "Davide Dellucci",
-    "expiryMonth": "06",
-    "expiryYear": "2018",
-    "billingAddress": "Davide Dellucci, Via Belviglieri 101, 00144 Roma, ITALY"
   }
 }
