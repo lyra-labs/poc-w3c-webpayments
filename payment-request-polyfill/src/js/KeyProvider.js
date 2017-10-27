@@ -3,9 +3,9 @@ export default class KeyProvider {
     this.url = url;
   }
 
-  obtainEncryptionKey() {
+  getEncryptionKey() {
     return window
-      .fetch(`${this.url}/obtainEncryptionKey`)
+      .fetch(`${this.url}/encryptionKey`)
       .then(res => res.json());
   }
 }

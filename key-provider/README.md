@@ -17,12 +17,13 @@
 ### Options
 
 * `--hostname` : default is `0.0.0.0`
-* `--port` : default is `3042`
-* `--merchantHost` : default is `http://localhost:3000`
+* `--port` : default is `9092`
+* `--merchantHost` : default is `http://localhost:9093`
+* `--backend` : default is `payzen`, available backends: `payzen`, `mock` (offline mode)
 
 ## API
 
-### `GET /obtainEncryptionKey`
+### `GET /encryptionKey`
 
 Returns the RSA public key to the Payment Request API for card data encryption.
 
@@ -78,3 +79,39 @@ or
   }
 }
 ```
+
+### `GET /pendingKeys`
+
+Returns generated private keys waiting for a payment.
+
+##### Response
+
+```javascript
+{
+  '<requestId>': 'base64string...',
+  '<requestId>': 'base64string...',
+  ...
+}
+```
+
+### `POST /clearPendingKeys`
+
+Clears generated private keys waiting for a payment.
+
+### `GET /pendingPayments`
+
+Returns payments awaiting for 3DS authentication.
+
+##### Response
+
+```javascript
+{
+  '<threeDSRequestId>': '{JSON workload}',
+  '<threeDSRequestId>': '{JSON workload}',
+  ...
+}
+```
+
+### `POST /clearPendingPayments`
+
+Clears payments awaiting for 3DS authentication.

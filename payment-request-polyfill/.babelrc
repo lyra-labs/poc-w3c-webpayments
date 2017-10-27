@@ -1,15 +1,6 @@
 {
   "presets": [
-    "env"
-  ],
-  "plugins": [
-    "transform-class-properties",
-    "transform-function-bind",
-    [
-      "transform-object-rest-spread",
-      {
-        "useBuiltIns": true
-      }
-    ]
+    "env",
+    "stage-1"
   ]
 }

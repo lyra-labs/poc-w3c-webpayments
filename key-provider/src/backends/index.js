@@ -1,7 +1,7 @@
-/* eslint-disable import/prefer-default-export */
+import PayZen from './PayZen';
+import Mock from './Mock';
 
-import * as payzen from './payzen';
-
-export {
-  payzen,
+export default {
+  payzen: PayZen,
+  mock: Mock,
 };

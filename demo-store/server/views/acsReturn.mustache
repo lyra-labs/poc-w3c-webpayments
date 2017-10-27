@@ -8,13 +8,9 @@
 <script>
   window.PaymentRequest = PaymentRequestPolyfill.default;
 
-  const headers = new window.Headers();
-  headers.append('Content-Type', 'application/json');
-
   const request = new window.Request('{{{paymentUrl}}}', {
     method: 'POST',
     body: '{{{body}}}',
-    headers: headers,
   });
 
   window

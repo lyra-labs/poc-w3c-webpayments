@@ -53,7 +53,7 @@ export default class PaymentRequest {
           Dialog.processing();
 
           this.keyProvider
-            .obtainEncryptionKey()
+            .getEncryptionKey()
             .then((res) => {
               const publicKey = Buffer.from(res.publicKey, 'base64').toString('utf8');
               const key = new RSA(publicKey);

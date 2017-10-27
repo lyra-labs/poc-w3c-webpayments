@@ -25,9 +25,9 @@
   },
   "dependencies": {
     "body-parser": "^1.18.2",
-    "config": "^1.26.2",
     "express": "^4.16.1",
     "minimist": "^1.2.0",
+    "morgan": "^1.9.0",
     "node-rsa": "^0.4.2",
     "payment": "^2.3.0",
     "soap": "^0.23.0",
@@ -35,8 +35,9 @@
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
-    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-eslint": "^8.0.1",
     "babel-preset-env": "^1.6.0",
+    "babel-preset-stage-1": "^6.24.1",
     "cross-env": "^5.1.0",
     "eslint": "^4.9.0",
     "eslint-config-airbnb-base": "^12.1.0",

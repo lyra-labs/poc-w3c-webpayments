@@ -126,7 +126,7 @@ class Cart extends React.Component {
 
         if (res.status === '3DS') {
           return paymentRequest.show3DS({
-            termUrl: `http://${config.hostname}:${config.port}/acsReturn`,
+            termUrl: `${config.demoStoreURL}/acsReturn`,
             ...res.details,
           });
         }

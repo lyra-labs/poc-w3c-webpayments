@@ -27,5 +27,6 @@ yarn link payment-request-polyfill
 ### Options
 
 * `--hostname` : default is `0.0.0.0`
-* `--port` : default is `3000`
-* `--keyProviderURL` : default is `http://localhost:3042`
+* `--port` : default is `9093`
+* `--keyProviderURL` : default is `http://localhost:9092`
+* `--demoStoreURL` : default is `http://localhost:9093`

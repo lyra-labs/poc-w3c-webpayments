@@ -5,13 +5,6 @@
     "react"
   ],
   "plugins": [
-    "transform-decorators-legacy",
-    "transform-function-bind",
-    [
-      "transform-object-rest-spread",
-      {
-        "useBuiltIns": true
-      }
-    ]
+    "transform-decorators-legacy"
   ]
 }
