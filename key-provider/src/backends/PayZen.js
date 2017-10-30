@@ -1,14 +1,7 @@
 import crypto from 'crypto';
 import soap from 'soap';
-import pymnt from 'payment';
 import uuid from 'uuid/v5';
-
-const cardArray = pymnt.getCardArray().map(card => ({
-  ...card,
-  pattern: (card.type === 'mastercard' ? /^5/ : card.pattern),
-}));
-
-pymnt.setCardArray(cardArray);
+import utils from '../utils';
 
 export default class PayZen {
   constructor() {
@@ -44,7 +37,7 @@ export default class PayZen {
   }
 
   static buildCardRequest(cardData) {
-    const cardType = pymnt.fns.cardType(cardData.cardNumber);
+    const cardType = utils.payment.fns.cardType(cardData.cardNumber);
 
     return {
       number: cardData.cardNumber,

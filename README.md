@@ -13,7 +13,7 @@ This project is composed by three parts :
 
 ## Demo
 
-An online demo will be available very shortly.
+An online demo is available at <https://demostore-webpaymentapi-demo.lyra-labs.fr>.  
 
 ## Installation
 
@@ -25,7 +25,7 @@ But you can also keep using `npm`, just replace all `yarn` by `npm` in the follo
 ### Key Provider
 
 The Key Provider is a simple nodejs server who acts like a "proxy" between the merchant and its payment backend.  
-By default, it runs at `http://localhost:3042`
+By default, it runs at `http://localhost:9092`
 
 ```
 cd key-provider
@@ -33,10 +33,12 @@ yarn install
 yarn start
 ```
 
+See [Key Provider](https://github.com/lyra-labs/poc-w3c-webpayments/tree/master/key-provider) for more details.
+
 ### Demo Store
 
 This demo store uses the standard [Payment Request API](https://w3c.github.io/payment-request/), which is polyfilled by us to handle encrypted card tokenization and 3DS.
-By default, it runs at `http://localhost:3000`
+By default, it runs at `http://localhost:9093`
 
 ```
 # In a different shell
@@ -50,8 +52,11 @@ yarn link payment-request-polyfill
 yarn start
 ```
 
-Now, just browse [http://localhost:3000](http://localhost:3000) and try to buy something.  
+See [Demo Store](https://github.com/lyra-labs/poc-w3c-webpayments/tree/master/demo-store) for more details.
+
+Now, just browse [http://localhost:9093](http://localhost:9093) and try to buy something.  
 All payment calls are binded to our a demo [PayZen](https://payzen.eu/) payment server, nothing will be debited, the payment is only simulated.  
+If you want a completely offline mode, you can start the `key-provider` with the parameter `--backend` set to `mock`: `yarn start --backend mock`  
 By default, a bunch of testing cards are registered in our Payment Request API polyfill, you can use them.
 
 ## Contact

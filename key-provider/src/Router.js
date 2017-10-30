@@ -10,7 +10,7 @@ export default class Router {
   constructor() {
     const Backend = backends[config.backend];
     if (!Backend) {
-      throw new Error(`backend ${config.backend} does not exist`);
+      throw new Error(`Backend ${config.backend} does not exist`);
     }
 
     this.backend = new Backend();
@@ -91,5 +91,16 @@ export default class Router {
   clearPendingPayments(req, res) {
     this.backend.clearPendingPayments();
     res.status(204).end();
+  }
+
+  /**
+   * POST /acsChallenge
+   */
+  acsChallenge(req, res) {
+    if (this.backend instanceof backends.mock) {
+      this.backend.acsChallenge(req, res);
+    } else {
+      res.status(404).end();
+    }
   }
 }
