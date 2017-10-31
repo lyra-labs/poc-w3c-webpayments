@@ -52,8 +52,8 @@ const Products = ({ cart, onAddToCart }) => (
             <TableRowColumn>
               <img src={song.cover} alt="cover" style={imgStyle} />
             </TableRowColumn>
-            <TableRowColumn><b>{song.title}</b></TableRowColumn>
-            <TableRowColumn>{song.artist}</TableRowColumn>
+            <TableRowColumn title={song.title}><b>{song.title}</b></TableRowColumn>
+            <TableRowColumn title={song.artist}>{song.artist}</TableRowColumn>
             <TableRowColumn>{song.duration}</TableRowColumn>
             <TableRowColumn><b>${song.price}</b></TableRowColumn>
             <TableRowColumn>

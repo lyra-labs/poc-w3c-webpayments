@@ -13,7 +13,8 @@ body {
   height: 100vh;
 
   .row {
-    width: 1155px;
+    min-width: 600px;
+    max-width: 1155px;
     margin: auto;
   }
 
