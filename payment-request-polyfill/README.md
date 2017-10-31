@@ -1,6 +1,6 @@
 # Payment Request API Polyfill
 
-Uses encrypted card tokenization and supports 3DS.
+Simulates the Encrypted Card Payment Handler with 3DS support.
 
 ## Installation
 

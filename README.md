@@ -2,7 +2,7 @@
 
 ## Introduction
 
-A working example of how Payment Request API may looks like with encrypted card tokenization and 3DS.  
+A working example of how Payment Request API may looks like with Encrypted Card tokenization and 3D-Secure support.  
 This project is composed by three parts :
 
 * `key-provider` provides a public key to the PR API (card data encryption) and handles payments from the merchant (card data decryption)
@@ -14,13 +14,14 @@ This project is composed by three parts :
 ## Demo
 
 An online demo is available at <https://demostore-webpaymentapi-demo.lyra-labs.fr>.  
+All payments are performed in test mode, nothing will be debited.
 
 ## Installation
 
 ### Prerequisites
 
 If you don't already use [Yarn](https://yarnpkg.com), you can install it with `npm install -g yarn`.  
-But you can also keep using `npm`, just replace all `yarn` by `npm` in the following instructions.
+But you can also keep using `npm`, just replace all `yarn` occurences by `npm` in the following instructions.
 
 ### Key Provider
 
@@ -57,7 +58,7 @@ See [Demo Store](https://github.com/lyra-labs/poc-w3c-webpayments/tree/master/de
 Now, just browse [http://localhost:9093](http://localhost:9093) and try to buy something.  
 All payment calls stay offline (mock backend enabled by default).
 When starting the `key-provider`, you can specify `--backend payzen`  to use our online testing platform of [PayZen](https://payzen.eu/).  
-By default, a bunch of testing cards are registered in our Payment Request API polyfill, you can use them.
+By default, a bunch of testing cards are registered in our Payment Request API polyfill, you can use them safely.
 
 ## Contact
 
