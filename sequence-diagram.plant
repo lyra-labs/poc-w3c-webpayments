@@ -29,20 +29,21 @@ hnote right : <color #red>EncryptedCardResponse</color>
 
 group Out of W3C specification
 D -[#red]> E : <color #red>request payment</color>
+E --[#red]> D : <color #red>status</color>
 
-group only in case of enrolled cardholder
-E --[#red]> D : <color #red>enrolled</color>
-hnote left : <color #red>ACS URL</color>
+group In case of 3D-Secure enrolled cardholder
 D -[#red]> C : <color #red>authenticate cardholder</color>
+hnote right : <color #red>ACS URL</color>
 C -[#red]> A : <color #red>redirect to authentication</color>
 A -[#red]> G : <color #red>authenticate</color>
 G --[#red]> A: <color #red>authenticated</color>
-A --[#red]> C: <color #red>authenticated</color>
-C --[#red]> D: <color #red>authenticated</color>
+A --[#red]> D: <color #red>authenticated</color>
 D -[#red]> E : <color #red>finalize payment</color>
+E --[#red]> D : <color #red>status</color>
+D -[#red]> C: <color #red>notify authentication</color>
+C --[#red]> D: <color #red>authenticated</color>
 end group
 
-E --[#red]> D : <color #red>status</color>
 end group
 
 D --> C : status
