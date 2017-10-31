@@ -18,7 +18,7 @@
 
 * `--hostname` : default is `0.0.0.0`
 * `--port` : default is `9092`
-* `--backend` : default is `payzen`, available backends: `payzen`, `mock` (offline mode)
+* `--backend` : default is `mock`, available backends: `mock` (offline mode) or `payzen` (using PayZen testing platform)
 * `--keyProviderURL` : default is `http://localhost:9092`
 * `--allowedOrigins` : default is `http://localhost:9093` (you can set several `--allowedOrigins`)
 

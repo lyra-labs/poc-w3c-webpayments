@@ -55,8 +55,8 @@ yarn start
 See [Demo Store](https://github.com/lyra-labs/poc-w3c-webpayments/tree/master/demo-store) for more details.
 
 Now, just browse [http://localhost:9093](http://localhost:9093) and try to buy something.  
-All payment calls are binded to our a demo [PayZen](https://payzen.eu/) payment server, nothing will be debited, the payment is only simulated.  
-If you want a completely offline mode, you can start the `key-provider` with the parameter `--backend` set to `mock`: `yarn start --backend mock`  
+All payment calls stay offline (mock backend enabled by default).
+When starting the `key-provider`, you can specify `--backend payzen`  to use our online testing platform of [PayZen](https://payzen.eu/).  
 By default, a bunch of testing cards are registered in our Payment Request API polyfill, you can use them.
 
 ## Contact

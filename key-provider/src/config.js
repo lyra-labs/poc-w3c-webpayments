@@ -10,7 +10,7 @@ const allowedOrigins = argv.allowedOrigins
 export default {
   hostname: argv.hostname || '0.0.0.0',
   port: argv.port || 9092,
-  backend: argv.backend || 'payzen',
+  backend: argv.backend || 'mock',
   keyProviderURL: argv.keyProviderURL || 'http://localhost:9092',
   allowedOrigins,
 };

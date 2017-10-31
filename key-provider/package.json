@@ -20,7 +20,7 @@
     "prestart": "npm run build",
     "start": "cross-env NODE_ENV=production node dist/index.js",
     "start:dev": "nodemon src/index.js --exec babel-node",
-    "build": "rimraf dist && cross-env NODE_ENV=production babel src -d dist",
+    "build": "rimraf dist && cross-env NODE_ENV=production babel src -d dist --copy-files",
     "lint": "eslint src"
   },
   "dependencies": {

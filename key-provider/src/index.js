@@ -51,5 +51,5 @@ app.listen(config.port, config.hostname, (err) => {
   }
 
   // eslint-disable-next-line no-console
-  console.log(`> Key Provider is listening on http://${config.hostname}:${config.port}`);
+  console.log(`> Key Provider is listening on http://${config.hostname}:${config.port} (backend = ${config.backend})`);
 });
