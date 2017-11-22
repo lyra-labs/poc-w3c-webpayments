@@ -8,10 +8,10 @@ skinparam sequence {
 
 actor "User" as A
 participant "Browser" as B
-participant "Payment Handler" as C
+participant "Payment Application" as C
 participant "Merchant" as D
 participant "Key Provider" as E
-participant "ACS" as G
+participant "ACS/Issuer" as F
 
 A -> B : request payment
 hnote over A : <color #red>+ URL Key Provider</color>
@@ -35,8 +35,8 @@ group In case of 3D-Secure enrolled cardholder
 D -[#red]> C : <color #red>authenticate cardholder</color>
 hnote right : <color #red>ACS URL</color>
 C -[#red]> A : <color #red>redirect to authentication</color>
-A -[#red]> G : <color #red>authenticate</color>
-G --[#red]> A: <color #red>authenticated</color>
+A -[#red]> F : <color #red>authenticate</color>
+F --[#red]> A: <color #red>authenticated</color>
 A --[#red]> D: <color #red>authenticated</color>
 D -[#red]> E : <color #red>finalize payment</color>
 E --[#red]> D : <color #red>status</color>

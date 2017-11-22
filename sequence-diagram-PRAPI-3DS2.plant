@@ -1,0 +1,76 @@
+@startuml
+title Encrypted Card Interaction with 3DS 2.0
+
+actor "User" as A
+participant "Browser" as B
+participant "Payment Application" as C
+participant "Merchant" as D
+participant "Key Provider/3DS Server" as E
+participant "Acquirer" as G
+participant "Directory Server" as H
+participant "ACS/Issuer" as F
+
+A -> B : Request payment
+hnote over A : + URL Key Provider
+B -> D : Show payment request
+D --> B
+B --> A
+A -> B : Choose payment method
+B -> C : Hand-over control
+C -> E : Obtain encryption key
+E --> C
+C -> C : Encrypt card data
+hnote left : EncryptedCardData
+C -> D : Encrypted payload
+hnote right : EncryptedCardResponse
+
+group Out of W3C specification
+D -> E: Request payment
+E -> E: ACS version
+note right
+Previously received
+using PReq/PRes
+end note
+E--> D: 3DS Method URL
+D --> C: 3DS Method URL
+C <-> F: Gather device informations
+C -> D: Initiate 3DS
+D -> E: Initiate 3DS
+E -> H: AReq
+H -> F: AReq
+F -> F: Challenge or Frictionless
+F -> H: ARes
+H -> E: ARes
+
+alt Challenge Flow
+E --> D: CReq
+D --> C: CReq
+C -> F: CReq
+
+group loop
+F <-> C: Exchange HTML
+A <-> C: Exchange credential
+C -> F: Submit credentials
+F -> F: Challenge outcome
+end group
+
+F -> H: RReq
+H -> E: RReq
+E -> H: RRes
+H -> F: RRes
+F -> F: Receive
+F -> E: CRes
+end
+
+E -> G: Autorize payment
+G -> F: Autorize payment
+F --> G
+G --> E
+
+E --> D
+end group
+
+D --> C : status
+C --> B : status
+B --> A : status
+@enduml
