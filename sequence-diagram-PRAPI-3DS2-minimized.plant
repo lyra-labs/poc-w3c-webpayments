@@ -1,0 +1,50 @@
+@startuml
+hide footbox
+title Encrypted Card Interaction with Optional Authentication flow
+
+actor "User" as A
+participant "Mediator" as B
+participant "Payment Handler" as C
+participant "Merchant Checkout page" as G
+participant "Merchant Backend" as D
+participant "Key Provider" as E
+participant "Authentication Provider" as F
+
+A -> B : Request checkout
+B -> D : Request checkout page
+D --> G : Payment parameters
+G --> B : Request payment
+B --> A: Payment method list
+A -> B : Payment method
+B -> C : Hand-over control
+C -> E : Obtain encryption key
+E --> C
+C -> C : Encrypt datas
+C -> G : Encrypted payload
+
+opt
+G -> D : Payment request data
+note over G, F
+Manage pre-authentication and determine if and how to authenticate user.
+end note
+D --> G: Authentication elements
+end
+
+alt In case of authentication
+G -> C: Display authentication view
+opt
+note over A, F
+Authentication flow managed by merchant.
+end note
+C <-> F
+A <-> C
+F --> E
+E --> D
+D --> G
+end
+end
+
+G -> C : Close payment view
+C --> B
+B --> A
+@enduml

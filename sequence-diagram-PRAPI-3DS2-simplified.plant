@@ -1,0 +1,58 @@
+@startuml
+title Encrypted Card Interaction with 3DS 2.0 and Challenge Flow
+
+actor "User" as A
+participant "Mediator" as B
+participant "Payment Handler" as C
+participant "Merchant Checkout page" as G
+participant "Merchant Backend" as D
+participant "Key Provider" as E
+participant "Authentication Provider" as F
+
+A -> B : Request checkout
+B -> D : Request checkout page
+D --> G : Page with payment parameters
+G --> B : Request payment
+B --> A: Display payment method list
+A -> B : Choose payment method
+B -> C : Hand-over control
+C -> E : Obtain encryption key
+E --> C
+C -> C : Encrypt datas
+C -> G : Encrypted payload
+
+opt
+G -> D : Payment request data
+D -> E: Request payment
+E -> E: ACS version
+E--> D: 3DS Method URL
+D --> G: 3DS Method URL
+G <-> F: Gather device informations
+G -> D: Initiate 3DS
+D -> E: Initiate 3DS
+E -> F : Initiate 3DS
+F -> F: Challenge
+F --> E: CReq
+E --> D: CReq
+D --> G: CReq
+end
+
+G -> C: Display authentication view
+
+opt
+C -> F: CReq
+group loop
+F <-> C: Exchange HTML
+A <-> C: Exchange credential
+C -> F: Submit credentials
+F -> F: Challenge outcome
+end group
+F -> E: CRes
+E --> D
+D --> G
+end
+
+G -> C : Close payment view
+C --> B
+B --> A
+@enduml
