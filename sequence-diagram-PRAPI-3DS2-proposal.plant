@@ -18,36 +18,34 @@ hnote left: Payment Request API starts
 B --> A: Payment method list
 A -> B : Payment method
 B -> C : Hand-over control
-opt Might happen at other times than during the transaction
-C -> E : Obtain encryption key
-E --> C
-end
-C -> G : Return encrypted payload
 
 opt
-G -> D : Payment request data
-note over G, F
-Manage pre-authentication and determine if and how to authenticate user.
+C -> F : Authentication server decision
+F --> C
+end
+C -> C: Authentication decision
+note left
+    Decision based on:
+    * Amount of the transaction
+    * Previous user authentication
+    * Authentication server decision
+    * ... other risk considerations
 end note
-D --> G: Authentication elements
+
+alt Authentication required
+C -> A : Authentication
+A --> C
 end
 
-alt In case of authentication
-G -> C: Display authentication view
-opt
-note over A, F
-Authentication flow managed by merchant.
-end note
-C <-> F
-A <-> C
-F --> E
-E --> D
-D --> G
-end
-end
 
-G -> C : Close payment view
 C --> B
+hnote left: Authentication information
+B -> G
+G -> D
+D --> G
+G --> B
 hnote left: Payment Request API ends
 B --> A
+
+
 @enduml
