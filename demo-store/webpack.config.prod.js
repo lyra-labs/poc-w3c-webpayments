@@ -1,6 +1,7 @@
 const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
   entry: [
@@ -62,6 +63,11 @@ module.exports = {
       favicon: path.resolve('src/resources/imgs/favicon.ico'),
       inject: true,
     }),
+    new CopyWebpackPlugin([
+      {
+        from: 'src/resources/misc/robots.txt',
+      },
+    ]),
   ],
 
   output: {

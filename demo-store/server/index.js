@@ -32,7 +32,9 @@ app.post('/acsReturn', (req, res) => {
 });
 
 if (isDeveloping) {
+  // -----------
   // DEVELOPMENT
+  // -----------
 
   const webpack = require('webpack');
   const webpackMiddleware = require('webpack-dev-middleware');
@@ -55,13 +57,14 @@ if (isDeveloping) {
 
   app.use(middleware);
   app.use(webpackHotMiddleware(compiler));
-
   app.get('*', (req, res) => {
     res.write(middleware.fileSystem.readFileSync(path.join(root, 'dist/index.html')));
     res.end();
   });
 } else {
+  // ----------
   // PRODUCTION
+  // ----------
 
   app.use(express.static(path.join(root, 'dist')));
   app.get('*', (req, res) => {
