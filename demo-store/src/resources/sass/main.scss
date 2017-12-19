@@ -5,7 +5,7 @@ body {
   margin: 0;
 }
 
-#container {
+#root {
   display: flex;
   flex-direction: column;
   font-family: 'Roboto', sans-serif;
@@ -15,6 +15,11 @@ body {
   .row {
     min-width: 600px;
     max-width: 1155px;
+    margin: auto;
+  }
+
+  #recaptcha-container {
+    text-align: center;
     margin: auto;
   }
 
