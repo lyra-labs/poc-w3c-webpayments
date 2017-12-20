@@ -1,5 +1,6 @@
 import React, { Fragment } from 'react';
 import autobind from 'autobind-decorator';
+import CircularProgress from 'material-ui/CircularProgress';
 import ReCAPTCHA from 'react-google-recaptcha';
 import Header from './Header';
 import Products from './Products';
@@ -12,6 +13,14 @@ export default class extends React.Component {
     this.state = {
       isCaptchaOK: false,
     };
+
+    this.captcha = null;
+  }
+
+  componentDidMount() {
+    window.addEventListener('load', () => {
+      this.captcha.execute();
+    });
   }
 
   @autobind
@@ -25,11 +34,12 @@ export default class extends React.Component {
     if (!this.state.isCaptchaOK) {
       return (
         <div id="recaptcha-container">
-          <h4>Please fill the captcha to access the demo</h4>
+          <CircularProgress size={70} />
           {/* eslint-disable react/no-string-refs */}
           <ReCAPTCHA
-            ref="recaptcha"
-            sitekey="6LdO2zwUAAAAAOjGA91nOJsYoiWAwNuCPUn0hSPE"
+            ref={(el) => { this.captcha = el; }}
+            size="invisible"
+            sitekey="6LfcxD0UAAAAAD9NNF3-BINpcdD_2PXEhUzULLCS"
             onChange={this.grecaptchaCallback}
           />
           {/* eslint-enable react/no-string-refs */}
