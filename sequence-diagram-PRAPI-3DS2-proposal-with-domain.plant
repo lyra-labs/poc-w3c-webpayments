@@ -1,0 +1,58 @@
+@startuml
+hide footbox
+title Encrypted Card Interaction with Optional Authentication flow
+
+actor "User" as A
+participant "Mediator" as B
+participant "Payment Handler" as C
+participant "Merchant Checkout page" as G
+box "Agent/Browser context" #LightBlue
+	participant B
+	participant C
+    participant G
+end box
+
+participant "Merchant Backend\n**merchant.com**" as D
+participant "Authentication Provider\n**bank.com**" as F
+
+A -> B : Request checkout
+B -> D : Request **merchant.com** checkout page
+D --> G : Payment parameters
+G --> B : Request payment
+hnote left: Payment Request API starts
+B --> A: Payment method list
+A -> B : Payment method
+B -> C : Hand-over control
+
+opt
+C -> F : Ask for **bank.com** authentication server decision
+F --> C
+end
+C -> C: Authentication decision
+note left
+    Decision based on:
+    * Amount of the transaction
+    * Previous user authentication
+    * Authentication server decision
+    * ... other risk considerations
+end note
+
+alt Authentication required
+C -> A : Authentication
+C -> F: Interract with **bank.com** providing authentication content 
+F --> C
+A --> C
+end
+
+
+C --> B
+hnote left: Authentication information
+B -> G: Return authentication token
+G -> D: Transmit authentication\ntoken to **merchant.com**
+D --> G
+G --> B
+hnote left: Payment Request API ends
+B --> A
+
+
+@enduml
