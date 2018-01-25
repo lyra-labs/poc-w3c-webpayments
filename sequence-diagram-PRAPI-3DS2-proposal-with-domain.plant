@@ -11,7 +11,6 @@ box "Agent/Browser context" #LightBlue
 	participant C
     participant G
 end box
-
 participant "Merchant Backend\n**merchant.com**" as D
 participant "Authentication Provider\n**bank.com**" as F
 
@@ -25,8 +24,12 @@ A -> B : Payment method
 B -> C : Hand-over control
 
 opt
-C -> F : Ask for **bank.com** authentication server decision
-F --> C
+C -> D : Ask for **merchant.com** authentication server decision
+opt
+D -> F: Ask for **bank.com**\nauthentication decision
+F --> D
+end
+D --> C
 end
 C -> C: Authentication decision
 note left
