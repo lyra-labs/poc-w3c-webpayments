@@ -24,7 +24,7 @@ A -> B : Payment method
 B -> C : Hand-over control
 
 opt
-C -> D : Ask for **merchant.com** authentication server decision
+C -> D : Ask for **merchant.com** server authentication decision
 opt
 D -> F: Ask for **bank.com**\nauthentication decision
 F --> D
