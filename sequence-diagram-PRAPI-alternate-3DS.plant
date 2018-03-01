@@ -1,0 +1,68 @@
+@startuml
+hide footbox
+title Payment Request API authentication
+
+actor "User" as A
+participant "Mediator" as B
+participant "Issuer Payment Handler\n**mybank.com**" as C
+participant "Merchant Checkout page" as G
+box "Agent/Browser context" #LightBlue
+	participant B
+	participant C
+    participant G
+end box
+participant "Issuer Backend \n**mybank.com**" as F
+participant "Merchant Backend\n**merchant.com**" as D
+
+A -> B : Request checkout
+B -> D : Request **merchant.com** checkout page
+D --> G : Payment parameters
+note over B, G
+    supportedMethods: ["tokenized-card"],
+    data: {
+        supportedNetworks: ['CB', 'mastercard','visa', 'amex', 'discover', 'jcb', 'unionpay'],
+        supportedTypes: ['credit','debit'],
+        keyProviderURL: 'https://pspKeyProvider.example/tokenizedCardPublicKey',
+        strongAuth: ['3DS2', 'U2F'], //Means: require one of 3DS2 or FIDO U2F
+    }
+end note
+G --> B : Request payment
+hnote left: Payment Request API starts
+B --> A: Payment method list
+A -> B : Select **mybank.com** Payment Handler
+B -> C : Hand-over control
+
+C -> A: Prompt user
+A --> C: Card
+C -> F: Transmit card
+
+F -> F: Determine Challenge\nand authentication type\nU2F or 3DS
+note left
+In that proposal, **3DS flow** is
+**initiated by issuer** and requires
+3DS protocol update
+end note
+
+opt In case of U2F or 3DS challenge
+F --> C: Challenge
+C -> A: Challenge
+A --> C: Response
+C -> F: Response
+end
+
+F --> C: Tokenized card including authentication result
+
+C --> B
+hnote left
+W3C tokenized card payment data
+including issuer-generated cryptogram
+end note
+B -> G: Return tokenized card payment data
+G -> D: Transmit tokenized card\npayment data to **merchant.com**
+D --> G
+G --> B
+hnote left: Payment Request API ends
+B --> A
+
+
+@enduml

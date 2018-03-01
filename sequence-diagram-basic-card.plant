@@ -1,0 +1,31 @@
+@startuml
+hide footbox
+title W3C basic-card payment
+
+skinparam sequence {
+  ArrowColor black
+}
+
+actor "User" as A
+participant "Browser" as B
+participant "Payment Handler" as C
+participant "Merchant" as D
+participant "Acquirer" as E
+
+A -> B : request payment
+hnote over A : using BasicCardRequest
+B -> D : show payment request
+D --> B
+B --> A
+A -> B : choose payment method
+B -> C : hand-over control
+C -> D: payment response
+hnote over D : using BasicCardResponse
+group Out of W3C specification
+D -> E: create payment
+E --> D : status
+end
+D --> C : status
+C --> B : status
+B --> A : status
+@enduml
