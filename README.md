@@ -62,5 +62,5 @@ By default, a bunch of testing cards are registered in our Payment Request API p
 
 ## Contact
 
-Gildas Le Louarn <gildas.lelouarn@lyra-network.com>  
+Florent Lambert <florent.lambert@lyra-network.com>  
 Alexandre Fournier <alexandre.fournier@lyra-network.com>
