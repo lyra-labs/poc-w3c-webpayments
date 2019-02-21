@@ -121,7 +121,7 @@ export default class PayZen {
           throw new Error(commonResponse.responseCodeDetail);
         }
 
-        if (commonResponse.transactionStatusLabel === 'AUTHORISED') {
+          if (commonResponse.transactionStatusLabel === 'AUTHORISED' || commonResponse.transactionStatusLabel === 'AUTHORISED_TO_VALIDATE') {
           return res.json({ status: 'OK' });
         }
 
